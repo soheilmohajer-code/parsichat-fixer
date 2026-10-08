@@ -1,0 +1,4 @@
+# Release zips (built locally for AMO / Web Store upload, not source)
+*.zip
+*.xpi
+*.crx
