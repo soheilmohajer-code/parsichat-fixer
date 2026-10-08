@@ -1,0 +1,90 @@
+<!DOCTYPE html>
+<html lang="fa" dir="rtl">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>ParsiChat Fixer — پارسی‌چت</title>
+  <link rel="stylesheet" href="popup.css">
+</head>
+<body>
+  <header class="brand">
+    <img class="logo" src="../icons/icon48.png" alt="پارسی‌چت" width="48" height="48">
+    <div class="brand-text">
+      <h1>پارسی‌چت</h1>
+      <p class="tagline">اصلاح جهت متن فارسی</p>
+    </div>
+    <label class="switch" title="فعال / غیرفعال">
+      <input type="checkbox" id="enabled">
+      <span class="slider"></span>
+    </label>
+  </header>
+
+  <section class="card">
+    <h2>سایت‌ها</h2>
+    <label class="row"><span class="site"><i class="dot"></i>claude.ai</span><input type="checkbox" id="site-claude"></label>
+    <label class="row"><span class="site"><i class="dot"></i>chatgpt.com</span><input type="checkbox" id="site-chatgpt"></label>
+    <label class="row"><span class="site"><i class="dot"></i>chat.openai.com</span><input type="checkbox" id="site-openai"></label>
+    <label class="row"><span class="site"><i class="dot"></i>gemini.google.com</span><input type="checkbox" id="site-gemini"></label>
+    <label class="row"><span class="site"><i class="dot"></i>chat.deepseek.com</span><input type="checkbox" id="site-deepseek"></label>
+    <label class="row"><span class="site"><i class="dot"></i>grok.com</span><input type="checkbox" id="site-grok"></label>
+  </section>
+
+  <section class="card">
+    <h2>فونت فارسی</h2>
+    <div class="opt-list" role="radiogroup" aria-label="فونت فارسی">
+      <label class="opt">
+        <input type="radio" name="font" value="vazirmatn">
+        <span class="opt-card">
+          <span class="radio-dot"></span>
+          <span class="opt-text"><b class="preview-vazir">وزیرمتن</b><small>داخلی • پیشنهادی</small></span>
+        </span>
+      </label>
+      <label class="opt">
+        <input type="radio" name="font" value="site">
+        <span class="opt-card">
+          <span class="radio-dot"></span>
+          <span class="opt-text"><b>پیش‌فرض سایت</b><small>بدون تغییر فونت</small></span>
+        </span>
+      </label>
+      <label class="opt">
+        <input type="radio" name="font" value="custom">
+        <span class="opt-card">
+          <span class="radio-dot"></span>
+          <span class="opt-text"><b>دلخواه</b><small>فونت نصب‌شده روی سیستم</small></span>
+        </span>
+      </label>
+    </div>
+    <input type="text" id="customFont" placeholder="نام فونت، مثلاً B Nazanin" hidden>
+  </section>
+
+  <section class="card">
+    <h2>اندازه و فاصله</h2>
+    <label class="slider-label" for="fontSize">اندازه فونت <b class="val"><span id="fontSizeVal">100</span>٪</b></label>
+    <input type="range" id="fontSize" min="90" max="130" step="5" value="100">
+    <label class="slider-label" for="lineHeight">ارتفاع خط <b class="val"><span id="lineHeightVal">1.9</span></b></label>
+    <input type="range" id="lineHeight" min="1.4" max="2.4" step="0.1" value="1.9">
+  </section>
+
+  <section class="card">
+    <h2>ارقام <small>(فقط متن، نه کد)</small></h2>
+    <div class="seg3" role="radiogroup" aria-label="ارقام">
+      <label class="opt">
+        <input type="radio" name="digits" value="off">
+        <span class="opt-card col"><b>بدون تغییر</b><small>Aa 123</small></span>
+      </label>
+      <label class="opt">
+        <input type="radio" name="digits" value="fa">
+        <span class="opt-card col"><b class="preview-vazir">۱۲۳۴۵</b><small>فارسی</small></span>
+      </label>
+      <label class="opt">
+        <input type="radio" name="digits" value="en">
+        <span class="opt-card col"><b>12345</b><small>انگلیسی</small></span>
+      </label>
+    </div>
+  </section>
+
+  <p id="status"></p>
+  <footer class="credit">Built by <b>zenithra</b> / Soheil Mohajer · <a id="ghLink" href="https://github.com/soheilmohajer-code" target="_blank" rel="noopener">GitHub</a></footer>
+  <script src="popup.js"></script>
+</body>
+</html>

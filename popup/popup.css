@@ -1,0 +1,276 @@
+/* popup.css — تم تیره نئونی هماهنگ با آیکون پارسی‌چت */
+
+/* فونت داخلی فقط برای پیش‌نمایش گزینه‌ها (از داخل بسته لود می‌شود) */
+@font-face {
+  font-family: 'Vazirmatn';
+  src: url('../fonts/Vazirmatn-Regular.woff2') format('woff2');
+  font-weight: 400;
+  font-style: normal;
+  font-display: swap;
+  unicode-range: U+0600-06FF, U+0750-077F, U+08A0-08FF, U+FB50-FDFF, U+FE70-FEFF;
+}
+@font-face {
+  font-family: 'Vazirmatn';
+  src: url('../fonts/Vazirmatn-Medium.woff2') format('woff2');
+  font-weight: 500;
+  font-style: normal;
+  font-display: swap;
+  unicode-range: U+0600-06FF, U+0750-077F, U+08A0-08FF, U+FB50-FDFF, U+FE70-FEFF;
+}
+@font-face {
+  font-family: 'Vazirmatn';
+  src: url('../fonts/Vazirmatn-Bold.woff2') format('woff2');
+  font-weight: 700;
+  font-style: normal;
+  font-display: swap;
+  unicode-range: U+0600-06FF, U+0750-077F, U+08A0-08FF, U+FB50-FDFF, U+FE70-FEFF;
+}
+
+* { box-sizing: border-box; }
+
+body {
+  width: 290px;
+  margin: 0;
+  padding: 14px 14px 12px;
+  /* فونت خود پاپ‌آپ هم وزیرمتن (فقط حروف فارسی؛ لاتین با فallback می‌ماند) */
+  font-family: 'Vazirmatn', Tahoma, 'Segoe UI', system-ui, sans-serif;
+  font-size: 13px;
+  color: #ece9f7;
+  background:
+    radial-gradient(120px 90px at 85% -10px, rgba(255, 46, 166, .25), transparent 70%),
+    radial-gradient(140px 100px at 10% 0%, rgba(123, 47, 247, .28), transparent 70%),
+    linear-gradient(180deg, #171224 0%, #100c1b 100%);
+}
+
+/* ===== سربرگ ===== */
+.brand {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 10px 12px;
+  margin-bottom: 10px;
+  border-radius: 14px;
+  background: rgba(255, 255, 255, .05);
+  border: 1px solid rgba(255, 255, 255, .09);
+  box-shadow: 0 4px 18px rgba(123, 47, 247, .25);
+}
+.logo {
+  width: 44px;
+  height: 44px;
+  border-radius: 12px;
+  filter: drop-shadow(0 0 8px rgba(255, 46, 166, .55));
+}
+.brand-text { flex: 1; }
+.brand-text h1 {
+  margin: 0;
+  font-size: 17px;
+  font-weight: 700;
+  background: linear-gradient(90deg, #ff5ebb, #a06bff);
+  -webkit-background-clip: text;
+  background-clip: text;
+  color: transparent;
+}
+.tagline { margin: 2px 0 0; font-size: 11px; color: #a99fc7; }
+
+/* ===== سوییچ نئونی ===== */
+.switch { position: relative; width: 44px; height: 24px; flex-shrink: 0; display: inline-block; }
+.switch input { opacity: 0; width: 0; height: 0; }
+.switch .slider {
+  position: absolute; inset: 0; border-radius: 24px;
+  background: rgba(255, 255, 255, .12);
+  border: 1px solid rgba(255, 255, 255, .14);
+  transition: all .25s; cursor: pointer;
+}
+.switch .slider::before {
+  content: ''; position: absolute; width: 16px; height: 16px;
+  border-radius: 50%; background: #8f8aa3; top: 3px; right: 4px; transition: all .25s;
+}
+.switch input:checked + .slider {
+  background: linear-gradient(90deg, #ff2ea6, #7b2ff7);
+  border-color: transparent;
+  box-shadow: 0 0 12px rgba(255, 46, 166, .6);
+}
+.switch input:checked + .slider::before { transform: translateX(-19px); background: #fff; }
+
+/* ===== کارت‌ها ===== */
+.card {
+  padding: 10px 12px 12px;
+  margin-bottom: 10px;
+  border-radius: 14px;
+  background: rgba(255, 255, 255, .045);
+  border: 1px solid rgba(255, 255, 255, .08);
+}
+.card h2 {
+  margin: 0 0 8px;
+  font-size: 12px;
+  font-weight: 700;
+  color: #c9bfff;
+}
+.card h2 small { font-weight: 400; color: #8f86ad; font-size: 11px; }
+
+/* ===== ردیف سایت‌ها ===== */
+.row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 6px 2px;
+  cursor: pointer;
+  border-radius: 8px;
+}
+.row:hover { background: rgba(255, 255, 255, .05); }
+.site {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  direction: ltr;
+  font-size: 12.5px;
+  color: #d9d4ec;
+}
+.dot {
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  background: #22d3ee;
+  box-shadow: 0 0 8px #22d3ee;
+}
+.row input[type="checkbox"] {
+  width: 17px;
+  height: 17px;
+  accent-color: #ff2ea6;
+  cursor: pointer;
+}
+
+/* ===== گزینه‌های کارتی مدرن (فونت و ارقام) ===== */
+.opt-list { display: flex; flex-direction: column; gap: 8px; }
+.seg3 { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 8px; }
+.opt { display: block; cursor: pointer; }
+.opt input { position: absolute; opacity: 0; pointer-events: none; }
+.opt-card {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 9px 11px;
+  border-radius: 12px;
+  background: rgba(0, 0, 0, .3);
+  border: 1px solid rgba(255, 255, 255, .1);
+  transition: border-color .2s, box-shadow .2s, background .2s;
+}
+.opt:hover .opt-card { border-color: rgba(160, 107, 255, .55); }
+.opt input:checked + .opt-card {
+  border-color: #ff2ea6;
+  background: linear-gradient(180deg, rgba(255, 46, 166, .16), rgba(123, 47, 247, .14));
+  box-shadow: 0 0 14px rgba(255, 46, 166, .35), inset 0 0 12px rgba(255, 46, 166, .08);
+}
+.opt input:focus-visible + .opt-card { outline: 2px solid #a06bff; outline-offset: 2px; }
+.radio-dot {
+  position: relative;
+  width: 16px;
+  height: 16px;
+  flex-shrink: 0;
+  border-radius: 50%;
+  border: 2px solid #6f678c;
+  transition: border-color .2s;
+}
+.opt input:checked + .opt-card .radio-dot { border-color: #ff2ea6; }
+.opt input:checked + .opt-card .radio-dot::after {
+  content: '';
+  position: absolute;
+  inset: 3px;
+  border-radius: 50%;
+  background: linear-gradient(135deg, #ff2ea6, #7b2ff7);
+  box-shadow: 0 0 6px #ff2ea6;
+}
+.opt-text b { display: block; font-size: 13px; font-weight: 700; }
+.opt-text small { color: #8f86ad; font-size: 11px; }
+.opt input:checked + .opt-card .opt-text small { color: #c9bfff; }
+/* حالت ستونی (دکمه‌های ارقام) */
+.opt-card.col { flex-direction: column; gap: 2px; align-items: center; text-align: center; padding: 9px 4px; }
+.opt-card.col b { font-size: 12.5px; }
+.opt-card.col small { font-size: 10.5px; }
+/* پیش‌نمایش واقعی با فونت وزیرمتن */
+.preview-vazir { font-family: 'Vazirmatn', Tahoma, sans-serif; }
+
+/* ===== ورودی نام فونت دلخواه ===== */
+input[type="text"] {
+  width: 100%;
+  padding: 8px 10px;
+  margin-top: 8px;
+  border: 1px solid rgba(255, 255, 255, .14);
+  border-radius: 10px;
+  font-family: inherit;
+  font-size: 13px;
+  color: #ece9f7;
+  background: rgba(0, 0, 0, .35);
+  outline: none;
+  direction: rtl;
+}
+input[type="text"]:focus { border-color: #a06bff; box-shadow: 0 0 0 2px rgba(160, 107, 255, .25); }
+
+/* ===== اسلایدرها ===== */
+.slider-label {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  margin: 8px 0 2px;
+  font-size: 12px;
+  color: #c9c2e2;
+}
+.slider-label .val {
+  color: #22d3ee;
+  text-shadow: 0 0 8px rgba(34, 211, 238, .7);
+  /* ایزوله چپ‌به‌راست تا «105٪» همیشه به همین ترتیب بماند و ٪ جابه‌جا نشود */
+  direction: ltr;
+  unicode-bidi: isolate;
+}
+input[type="range"] {
+  width: 100%;
+  margin: 6px 0 4px;
+  appearance: none;
+  -webkit-appearance: none;
+  height: 6px;
+  border-radius: 6px;
+  /* همیشه چپ‌به‌راست تا دستگیره با نوار پرشده هم‌جهت باشد (مستقل از RTL صفحه) */
+  direction: ltr;
+  background: linear-gradient(90deg, #ff2ea6, #7b2ff7 var(--fill, 50%), rgba(255,255,255,.12) var(--fill, 50%));
+  outline: none;
+  cursor: pointer;
+}
+input[type="range"]::-webkit-slider-thumb {
+  -webkit-appearance: none;
+  width: 18px;
+  height: 18px;
+  border-radius: 50%;
+  background: #fff;
+  border: 3px solid #ff2ea6;
+  box-shadow: 0 0 10px rgba(255, 46, 166, .8);
+}
+input[type="range"]::-moz-range-thumb {
+  width: 14px;
+  height: 14px;
+  border-radius: 50%;
+  background: #fff;
+  border: 3px solid #ff2ea6;
+  box-shadow: 0 0 10px rgba(255, 46, 166, .8);
+}
+
+#status {
+  min-height: 18px;
+  margin: 2px 0 0;
+  font-size: 12px;
+  text-align: center;
+  color: #22d3ee;
+  text-shadow: 0 0 8px rgba(34, 211, 238, .6);
+}
+
+/* امضای سازنده (انگلیسی، چپ‌به‌راست ایزوله تا ترتیب کلمات به‌هم نریزد) */
+.credit {
+  margin: 6px 0 0;
+  font-size: 10.5px;
+  text-align: center;
+  color: #8f86ad;
+  direction: ltr;
+  unicode-bidi: isolate;
+}
+.credit b { color: #c9bfff; }
+.credit a { color: #22d3ee; text-decoration: none; }
+.credit a:hover { text-decoration: underline; }

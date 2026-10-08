@@ -1,0 +1,72 @@
+{
+  "manifest_version": 3,
+  "name": "ParsiChat Fixer — پارسی‌چت",
+  "short_name": "پارسی‌چت",
+  "version": "1.1.0",
+  "description": "پارسی‌چت: رفع به‌هم‌ریختگی متن فارسی/انگلیسی (RTL/LTR) در Claude، ChatGPT، Gemini، DeepSeek و Grok. بدون ارسال هیچ داده‌ای به بیرون.",
+  "minimum_chrome_version": "88",
+  "permissions": ["storage"],
+  "browser_specific_settings": {
+    "gecko": {
+      "id": "parsichat@soheil.dev",
+      "data_collection_permissions": { "required": ["none"] }
+    }
+  },
+  "host_permissions": [
+    "https://claude.ai/*",
+    "https://chatgpt.com/*",
+    "https://chat.openai.com/*",
+    "https://gemini.google.com/*",
+    "https://chat.deepseek.com/*",
+    "https://grok.com/*"
+  ],
+  "action": {
+    "default_popup": "popup/popup.html",
+    "default_title": "ParsiChat Fixer — پارسی‌چت",
+    "default_icon": {
+      "16": "icons/icon16.png",
+      "32": "icons/icon32.png",
+      "48": "icons/icon48.png",
+      "128": "icons/icon128.png"
+    }
+  },
+  "icons": {
+    "16": "icons/icon16.png",
+    "32": "icons/icon32.png",
+    "48": "icons/icon48.png",
+    "128": "icons/icon128.png"
+  },
+  "content_scripts": [
+    {
+      "matches": [
+        "https://claude.ai/*",
+        "https://chatgpt.com/*",
+        "https://chat.openai.com/*",
+        "https://gemini.google.com/*",
+        "https://chat.deepseek.com/*",
+        "https://grok.com/*"
+      ],
+      "js": ["content/selectors.js", "content/bidi.js", "content/content.js"],
+      "css": ["content/styles.css"],
+      "run_at": "document_idle",
+      "all_frames": false
+    }
+  ],
+  "web_accessible_resources": [
+    {
+      "resources": [
+        "fonts/Vazirmatn-Regular.woff2",
+        "fonts/Vazirmatn-Medium.woff2",
+        "fonts/Vazirmatn-Bold.woff2"
+      ],
+      "matches": [
+        "https://claude.ai/*",
+        "https://chatgpt.com/*",
+        "https://chat.openai.com/*",
+        "https://gemini.google.com/*",
+        "https://chat.deepseek.com/*",
+        "https://grok.com/*"
+      ]
+    }
+  ]
+}

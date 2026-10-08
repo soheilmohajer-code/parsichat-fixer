@@ -1,0 +1,138 @@
+/* styles.css — استایل‌های اصلاح جهت + فونت Vazirmatn (بدون CDN، فقط فایل محلی) */
+
+/* ===== ۱) تعریف فونت محلی (فقط روی حروف فارسی/عربی اعمال می‌شود) =====
+ * اگر فایل‌های fonts/ حذف/غایب باشند، این @font-faceها خطا نمی‌دهند
+ * و مرورگر خودکار به fallback (Tahoma/system) برمی‌گردد. */
+@font-face {
+  font-family: 'Vazirmatn';
+  src: url('../fonts/Vazirmatn-Regular.woff2') format('woff2');
+  font-weight: 400;
+  font-style: normal;
+  font-display: swap;
+  unicode-range: U+0600-06FF, U+0750-077F, U+08A0-08FF, U+FB50-FDFF, U+FE70-FEFF;
+}
+@font-face {
+  font-family: 'Vazirmatn';
+  src: url('../fonts/Vazirmatn-Medium.woff2') format('woff2');
+  font-weight: 500;
+  font-style: normal;
+  font-display: swap;
+  unicode-range: U+0600-06FF, U+0750-077F, U+08A0-08FF, U+FB50-FDFF, U+FE70-FEFF;
+}
+@font-face {
+  font-family: 'Vazirmatn';
+  src: url('../fonts/Vazirmatn-Bold.woff2') format('woff2');
+  font-weight: 700;
+  font-style: normal;
+  font-display: swap;
+  unicode-range: U+0600-06FF, U+0750-077F, U+08A0-08FF, U+FB50-FDFF, U+FE70-FEFF;
+}
+
+/* متغیرهای قابل تنظیم از popup (روی <html> ست می‌شوند) */
+:root {
+  --pcf-font-size: 100%;
+  --pcf-line-height: 1.9;
+  --pcf-custom-font: inherit;
+}
+
+/* وقتی افزونه خاموش است هیچ قانونی اعمال نشود */
+html.pcf-off .pcf-rtl,
+html.pcf-off .pcf-ltr { direction: inherit; text-align: inherit; }
+
+/* ===== ۲) ضدپرش (flicker-free): کانتینر پیام‌ها از قبل plaintext باشند =====
+ * حتی قبل از اجرای JS، مرورگر جهت هر پاراگراف را از روی محتوایش حدس می‌زند. */
+[data-message-author-role],
+div[data-testid="user-message"],
+div[data-testid="assistant-message"],
+div.font-claude-message,
+message-content,
+.response-content,
+.query-content,
+.ds-message,
+.markdown {
+  unicode-bidi: plaintext;
+}
+
+/* ===== ۳) بلوک‌های فارسی/انگلیسی ===== */
+.pcf-rtl {
+  direction: rtl !important;
+  text-align: right !important;
+  unicode-bidi: isolate !important;
+  line-height: var(--pcf-line-height, 1.9);
+}
+.pcf-ltr {
+  direction: ltr !important;
+  text-align: left !important;
+  unicode-bidi: isolate !important;
+}
+
+/* لینک و تگ‌های درون‌خطی داخل جمله فارسی نباید ترتیب را خراب کنند */
+.pcf-rtl a, .pcf-rtl b, .pcf-rtl i, .pcf-rtl span,
+.pcf-rtl strong, .pcf-rtl em, .pcf-rtl u {
+  unicode-bidi: isolate;
+}
+
+/* ===== ۴) کد همیشه LTR ===== */
+pre, code, kbd, samp {
+  direction: ltr !important;
+  text-align: left !important;
+  unicode-bidi: isolate !important;
+}
+pre { overflow-x: auto; }
+/* کد درون‌خطی داخل جمله فارسی */
+.pcf-code-inline {
+  direction: ltr !important;
+  unicode-bidi: isolate !important;
+  display: inline-block;
+  padding: 0 4px;
+}
+
+/* ===== ۵) لیست‌ها: نقطه/شماره در RTL سمت راست ===== */
+.pcf-rtl:is(ul, ol),
+ul.pcf-rtl, ol.pcf-rtl {
+  padding-right: 1.6em !important;
+  padding-left: 0 !important;
+  list-style-position: outside;
+}
+.pcf-ltr:is(ul, ol),
+ul.pcf-ltr, ol.pcf-ltr {
+  padding-left: 1.6em !important;
+  padding-right: 0 !important;
+}
+/* آیتم‌های فارسی داخل لیست انگلیسی (و برعکس) */
+li.pcf-rtl { direction: rtl !important; text-align: right !important; }
+
+/* ===== ۶) جدول فارسی ===== */
+table.pcf-table-rtl { direction: rtl !important; }
+table.pcf-table-rtl td, table.pcf-table-rtl th {
+  text-align: right;
+  unicode-bidi: isolate;
+}
+
+/* ===== ۷) باکس ورودی ===== */
+textarea.pcf-input-rtl,
+div[contenteditable="true"].pcf-input-rtl {
+  direction: rtl !important;
+  text-align: right !important;
+  unicode-bidi: plaintext !important;
+}
+
+/* ===== ۸) فونت فارسی =====
+ * unicode-range در @font-face guarantees که فقط حروف فارسی با Vazirmatn
+ * رندر شوند؛ حروف لاتین و کد با فونت خود سایت می‌مانند.
+ * pre/code عمداً از این قانون مستثنا هستند (monospace سایت حفظ شود). */
+html.pcf-font-vazir .pcf-rtl:not(pre):not(code),
+html.pcf-font-vazir [dir="rtl"]:not(pre):not(code):not(textarea) {
+  font-family: 'Vazirmatn', Tahoma, 'Segoe UI', system-ui, sans-serif !important;
+  font-size: var(--pcf-font-size, 100%);
+}
+/* فونت دلخواه کاربر (نام فونت نصب‌شده روی سیستم) */
+html.pcf-font-custom .pcf-rtl:not(pre):not(code),
+html.pcf-font-custom [dir="rtl"]:not(pre):not(code):not(textarea) {
+  font-family: var(--pcf-custom-font), Tahoma, system-ui, sans-serif !important;
+  font-size: var(--pcf-font-size, 100%);
+}
+/* حالت «فونت سایت»: فقط اندازه/ارتفاع خط تنظیم شود، خانواده فونت دست نخورد */
+html.pcf-font-site .pcf-rtl {
+  font-size: var(--pcf-font-size, 100%);
+}
