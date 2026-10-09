@@ -126,12 +126,15 @@ pre { overflow-x: auto; }
 #pcf-hl-bar .pcf-hl-dot.pcf-hl-green { background: #69f0ae; }
 #pcf-hl-bar .pcf-hl-dot.pcf-hl-pink { background: #ff80ab; }
 #pcf-hl-bar .pcf-hl-erase {
+  display: flex;
+  align-items: center;
+  justify-content: center;
   background: transparent;
   border: none;
   color: #c9bfff;
-  font-size: 14px;
   line-height: 1;
 }
+#pcf-hl-bar .pcf-hl-erase:hover { color: #ff80ab; }
 
 /* ===== ۵) لیست‌ها: نقطه/شماره در RTL سمت راست ===== */
 .pcf-rtl:is(ul, ol),
