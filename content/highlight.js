@@ -7,11 +7,17 @@
   'use strict';
 
   const HL_CLASS = 'pcf-hl';
-  const COLORS = {
-    yellow: 'pcf-hl-yellow',
-    green: 'pcf-hl-green',
-    pink: 'pcf-hl-pink'
-  };
+  const DEFAULT_COLORS = ['#ffeb3b', '#69f0ae', '#ff80ab'];
+  let hlColors = [...DEFAULT_COLORS];
+
+  // hex به rgba با شفافیت ماژیک‌وار (تا روی تم روشن و تیره خوانا بماند)
+  function hexToRgba(hex, alpha) {
+    let h = String(hex || '').replace('#', '');
+    if (/^[0-9a-fA-F]{3}$/.test(h)) h = h.split('').map((c) => c + c).join('');
+    if (!/^[0-9a-fA-F]{6}$/.test(h)) return `rgba(255, 235, 59, ${alpha})`;
+    const n = parseInt(h, 16);
+    return `rgba(${(n >> 16) & 255}, ${(n >> 8) & 255}, ${n & 255}, ${alpha})`;
+  }
 
   let enabled = true;
   let bar = null;
@@ -20,13 +26,18 @@
 
   async function init() {
     try {
-      const s = await chrome.storage.sync.get('highlight');
+      const s = await chrome.storage.sync.get(['highlight', 'hlColors']);
       enabled = s.highlight !== false;
+      if (Array.isArray(s.hlColors) && s.hlColors.length === 3) hlColors = s.hlColors.slice();
     } catch (e) { /* پیش‌فرض روشن */ }
     chrome.storage.onChanged.addListener((changes, area) => {
       if (area === 'sync' && changes.highlight) {
         enabled = changes.highlight.newValue !== false;
         if (!enabled) hideBar();
+      }
+      if (area === 'sync' && changes.hlColors && Array.isArray(changes.hlColors.newValue)) {
+        hlColors = changes.hlColors.newValue.slice(0, 3);
+        if (hlColors.length !== 3) hlColors = [...DEFAULT_COLORS];
       }
     });
     document.addEventListener('mouseup', onMouseUp);
@@ -67,16 +78,16 @@
     hideBar();
     bar = document.createElement('div');
     bar.id = 'pcf-hl-bar';
-    for (const [name, cls] of Object.entries(COLORS)) {
+    hlColors.forEach((color) => {
       const b = document.createElement('button');
       b.type = 'button';
-      b.className = 'pcf-hl-dot ' + cls;
+      b.className = 'pcf-hl-dot';
       b.title = 'هایلایت';
-      b.dataset.color = cls;
+      b.style.background = color;
       b.addEventListener('mousedown', (e) => e.preventDefault()); // سلکشن نپرد
-      b.addEventListener('click', () => applyHighlight(cls));
+      b.addEventListener('click', () => applyHighlight(color));
       bar.appendChild(b);
-    }
+    });
     const eraser = document.createElement('button');
     eraser.type = 'button';
     eraser.className = 'pcf-hl-erase';
@@ -111,7 +122,7 @@
     }
   }
 
-  function applyHighlight(cls) {
+  function applyHighlight(color) {
     const sel = window.getSelection();
     if (!sel.rangeCount) return;
     const range = sel.getRangeAt(0).cloneRange();
@@ -119,7 +130,9 @@
     // هایلایت تودرتو نکن: قبلی‌های داخل رنج را اول باز کن
     unwrapSpans(collectSpans(range, true));
     const span = document.createElement('span');
-    span.className = HL_CLASS + ' ' + cls;
+    span.className = HL_CLASS;
+    span.style.background = hexToRgba(color, 0.45);
+    span.style.boxShadow = `0 0 0 1px ${hexToRgba(color, 0.3)}`;
     try {
       range.surroundContents(span);
     } catch (e) {

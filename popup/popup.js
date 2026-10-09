@@ -5,6 +5,7 @@
   const DEFAULTS = {
     enabled: true,
     highlight: true,
+    hlColors: ['#ffeb3b', '#69f0ae', '#ff80ab'],
     sites: { claude: true, chatgpt: true, openai: true, gemini: true, deepseek: true, grok: true },
     font: 'vazirmatn',
     customFont: '',
@@ -17,6 +18,10 @@
   const els = {
     enabled: $('enabled'),
     highlight: $('highlight'),
+    hlColor0: $('hlColor0'),
+    hlColor1: $('hlColor1'),
+    hlColor2: $('hlColor2'),
+    hlReset: $('hlReset'),
     claude: $('site-claude'),
     chatgpt: $('site-chatgpt'),
     openai: $('site-openai'),
@@ -44,6 +49,9 @@
     const s = { ...DEFAULTS, ...stored, sites: { ...DEFAULTS.sites, ...(stored.sites || {}) } };
     els.enabled.checked = s.enabled !== false;
     els.highlight.checked = s.highlight !== false;
+    const savedColors = Array.isArray(s.hlColors) && s.hlColors.length === 3
+      ? s.hlColors : DEFAULTS.hlColors;
+    [els.hlColor0, els.hlColor1, els.hlColor2].forEach((el, i) => { el.value = savedColors[i]; });
     els.claude.checked = s.sites.claude !== false;
     els.chatgpt.checked = s.sites.chatgpt !== false;
     els.openai.checked = s.sites.openai !== false;
@@ -62,6 +70,10 @@
     document.querySelectorAll('input, select').forEach((el) => {
       el.addEventListener('change', scheduleSave);
       el.addEventListener('input', scheduleSave);
+    });
+    els.hlReset.addEventListener('click', () => {
+      [els.hlColor0, els.hlColor1, els.hlColor2].forEach((el, i) => { el.value = DEFAULTS.hlColors[i]; });
+      scheduleSave();
     });
     fontRadios.forEach((r) => {
       r.addEventListener('change', () => {
@@ -89,6 +101,7 @@
     const data = {
       enabled: els.enabled.checked,
       highlight: els.highlight.checked,
+      hlColors: [els.hlColor0.value, els.hlColor1.value, els.hlColor2.value],
       sites: {
         claude: els.claude.checked,
         chatgpt: els.chatgpt.checked,
