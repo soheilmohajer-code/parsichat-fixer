@@ -35,6 +35,7 @@
       settings = { ...DEFAULTS, sites: { ...DEFAULTS.sites } };
     }
     applyRootSettings();
+    ensureFontLoaded();
     if (isActiveForThisSite()) {
       processPage();
       startObserver();
@@ -57,6 +58,35 @@
 
   function isActiveForThisSite() {
     return settings.enabled && settings.sites[siteKey] !== false;
+  }
+
+  // لود مطمئن فونت با FontFace API و آدرس دقیق افزونه.
+  // (اگر @font-face داخل styles.css در بعضی صفحات resolve نشود، این مسیر جایگزین می‌شود)
+  let fontLoaded = false;
+  async function ensureFontLoaded() {
+    if (fontLoaded || settings.font !== 'vazirmatn') return;
+    try {
+      const faces = [
+        { weight: '400', file: 'Vazirmatn-Regular.woff2' },
+        { weight: '500', file: 'Vazirmatn-Medium.woff2' },
+        { weight: '700', file: 'Vazirmatn-Bold.woff2' }
+      ];
+      for (const f of faces) {
+        const face = new FontFace('Vazirmatn',
+          `url("${chrome.runtime.getURL('fonts/' + f.file)}") format("woff2")`,
+          {
+            weight: f.weight,
+            style: 'normal',
+            display: 'swap',
+            // فقط حروف فارسی/عربی (مثل styles.css) تا انگلیسی و کد دست نخورند
+            unicodeRange: 'U+0600-06FF, U+0750-077F, U+08A0-08FF, U+FB50-FDFF, U+FE70-FEFF'
+          });
+        document.fonts.add(face);
+        await face.load();
+      }
+      await document.fonts.load('16px Vazirmatn', 'فارسی تست');
+      fontLoaded = true;
+    } catch (e) { /* fallback: همان @font-face داخل styles.css */ }
   }
 
   // متغیرهای CSS روی <html> برای فونت/اندازه/ارتفاع خط (popup آن‌ها را تغییر می‌دهد)
@@ -82,6 +112,8 @@
       else settings[k] = v.newValue;
     }
     applyRootSettings();
+    fontLoaded = false;
+    ensureFontLoaded();
     if (isActiveForThisSite()) {
       clearMarks(); // تنظیم عوض شده → همه را دوباره پردازش کن
       processPage();
