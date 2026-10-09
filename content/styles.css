@@ -72,8 +72,9 @@ message-content,
   unicode-bidi: isolate;
 }
 
-/* ===== ۴) کد همیشه LTR ===== */
-pre, code, kbd, samp {
+/* ===== ۴) کد و فرمول ریاضی همیشه LTR ===== */
+pre, code, kbd, samp,
+.katex, .katex-display, .MathJax, mjx-container {
   direction: ltr !important;
   text-align: left !important;
   unicode-bidi: isolate !important;

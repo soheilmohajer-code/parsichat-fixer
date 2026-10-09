@@ -64,7 +64,7 @@
   }
 
   /**
-   * تبدیل ارقام فقط در گره‌های متنی (نه داخل pre/code).
+   * تبدیل ارقام فقط در گره‌های متنی (نه داخل pre/code و فرمول‌های ریاضی).
    * روی هر TextNode مستقیم اعمال می‌شود تا تگ‌ها دست نخورند.
    */
   function convertDigitsInElement(root, mode) {
@@ -75,8 +75,8 @@
           return NodeFilter.FILTER_REJECT;
         }
         const parent = node.parentElement;
-        if (parent && parent.closest('pre, code, kbd, samp')) {
-          return NodeFilter.FILTER_REJECT; // کد دست نخورد
+        if (parent && parent.closest('pre, code, kbd, samp, .katex, .MathJax, mjx-container')) {
+          return NodeFilter.FILTER_REJECT; // کد و فرمول ریاضی (KaTeX/MathJax) دست نخورد
         }
         return NodeFilter.FILTER_ACCEPT;
       }
