@@ -33,15 +33,20 @@
    * ۱) اولین حرف قوی ملاک اصلی است (استاندارد Unicode Bidi).
    * ۲) اگر حرف قوی نبود (فقط عدد/علائم)، نسبت فارسی به لاتین تصمیم می‌گیرد.
    * ۳) در تساوی/خلأ → ltr (پیش‌فرض وب).
+   * @param {string} text
+   * @param {object} [opts] - اگر opts.majority روشن باشد (برای li/ul/ol و
+   *   عنوان‌ها)، اکثریت فارسی بر حرف اول غلبه می‌کند؛ مثل «Gateway (پروکسی): ...»
+   *   که با کلمه انگلیسی شروع می‌شود ولی باید RTL باشد تا نشانگر لیست سمت راست بیاید.
    */
-  function detectDirection(text) {
+  function detectDirection(text, opts) {
     if (!text || !text.trim()) return 'ltr';
     const sample = text.length > 2000 ? text.slice(0, 2000) : text;
     const first = firstStrongDir(sample);
-    if (first) return first;
-    // فالبک نسبتی (برای متن‌های بدون حرف قوی)
     const fa = (sample.match(RTL_GLOBAL) || []).length;
     const en = (sample.match(LTR_GLOBAL) || []).length;
+    if (opts && opts.majority && fa > 0 && fa > en) return 'rtl';
+    if (first) return first;
+    // فالبک نسبتی (برای متن‌های بدون حرف قوی)
     if (fa === 0 && en === 0) return 'ltr';
     return fa >= en ? 'rtl' : 'ltr';
   }
