@@ -46,7 +46,7 @@
         "https://chat.deepseek.com/*",
         "https://grok.com/*"
       ],
-      "js": ["content/selectors.js", "content/bidi.js", "content/content.js"],
+      "js": ["content/selectors.js", "content/bidi.js", "content/content.js", "content/highlight.js"],
       "css": ["content/styles.css"],
       "run_at": "document_idle",
       "all_frames": false

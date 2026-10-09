@@ -88,6 +88,51 @@ pre { overflow-x: auto; }
   padding: 0 4px;
 }
 
+/* ===== ۴-ب) هایلایت متن چت (۳ رنگ ماژیک‌وار، روی روشن و تیره خوانا) ===== */
+.pcf-hl {
+  border-radius: 3px;
+  padding: 0 1px;
+  unicode-bidi: isolate;
+  color: inherit;
+}
+.pcf-hl-yellow { background: rgba(255, 235, 59, .45); box-shadow: 0 0 0 1px rgba(255, 235, 59, .3); }
+.pcf-hl-green { background: rgba(105, 240, 174, .4); box-shadow: 0 0 0 1px rgba(105, 240, 174, .3); }
+.pcf-hl-pink { background: rgba(255, 128, 171, .45); box-shadow: 0 0 0 1px rgba(255, 128, 171, .3); }
+
+/* نوار شناور انتخاب رنگ */
+#pcf-hl-bar {
+  position: fixed;
+  z-index: 2147483647;
+  display: flex;
+  align-items: center;
+  gap: 7px;
+  padding: 7px 9px;
+  direction: ltr;
+  background: #1d1730;
+  border: 1px solid rgba(255, 46, 166, .55);
+  border-radius: 13px;
+  box-shadow: 0 6px 22px rgba(0, 0, 0, .5), 0 0 14px rgba(255, 46, 166, .35);
+}
+#pcf-hl-bar button {
+  width: 22px;
+  height: 22px;
+  padding: 0;
+  border-radius: 50%;
+  border: 2px solid rgba(255, 255, 255, .25);
+  cursor: pointer;
+}
+#pcf-hl-bar button:hover { transform: scale(1.15); }
+#pcf-hl-bar .pcf-hl-dot.pcf-hl-yellow { background: #ffeb3b; }
+#pcf-hl-bar .pcf-hl-dot.pcf-hl-green { background: #69f0ae; }
+#pcf-hl-bar .pcf-hl-dot.pcf-hl-pink { background: #ff80ab; }
+#pcf-hl-bar .pcf-hl-erase {
+  background: transparent;
+  border: none;
+  color: #c9bfff;
+  font-size: 14px;
+  line-height: 1;
+}
+
 /* ===== ۵) لیست‌ها: نقطه/شماره در RTL سمت راست ===== */
 .pcf-rtl:is(ul, ol),
 ul.pcf-rtl, ol.pcf-rtl {

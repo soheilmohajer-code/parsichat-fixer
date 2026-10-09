@@ -4,6 +4,7 @@
 
   const DEFAULTS = {
     enabled: true,
+    highlight: true,
     sites: { claude: true, chatgpt: true, openai: true, gemini: true, deepseek: true, grok: true },
     font: 'vazirmatn',
     customFont: '',
@@ -15,6 +16,7 @@
   const $ = (id) => document.getElementById(id);
   const els = {
     enabled: $('enabled'),
+    highlight: $('highlight'),
     claude: $('site-claude'),
     chatgpt: $('site-chatgpt'),
     openai: $('site-openai'),
@@ -41,6 +43,7 @@
     const stored = await chrome.storage.sync.get(null);
     const s = { ...DEFAULTS, ...stored, sites: { ...DEFAULTS.sites, ...(stored.sites || {}) } };
     els.enabled.checked = s.enabled !== false;
+    els.highlight.checked = s.highlight !== false;
     els.claude.checked = s.sites.claude !== false;
     els.chatgpt.checked = s.sites.chatgpt !== false;
     els.openai.checked = s.sites.openai !== false;
@@ -85,6 +88,7 @@
   async function save() {
     const data = {
       enabled: els.enabled.checked,
+      highlight: els.highlight.checked,
       sites: {
         claude: els.claude.checked,
         chatgpt: els.chatgpt.checked,
