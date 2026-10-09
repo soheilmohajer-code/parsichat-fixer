@@ -291,6 +291,18 @@ input[type="range"]::-moz-range-thumb {
 }
 .hl-reset:hover { background: rgba(160, 107, 255, .15); }
 
+/* خط راهنمای کوچک */
+.hint {
+  margin: 6px 2px 0;
+  font-size: 11px;
+  line-height: 1.8;
+  color: #8f86ad;
+}
+/* خوشگل‌تر شدن نمونه‌رنگ‌ها */
+.hl-colors input[type="color"]::-webkit-color-swatch-wrapper { padding: 3px; }
+.hl-colors input[type="color"]::-webkit-color-swatch { border: none; border-radius: 6px; }
+.hl-colors input[type="color"]::-moz-color-swatch { border: none; border-radius: 6px; }
+
 /* امضای سازنده (انگلیسی، چپ‌به‌راست ایزوله تا ترتیب کلمات به‌هم نریزد) */
 .credit {
   margin: 6px 0 0;

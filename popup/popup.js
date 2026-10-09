@@ -71,10 +71,18 @@
       el.addEventListener('change', scheduleSave);
       el.addEventListener('input', scheduleSave);
     });
+    const swatches = [els.hlColor0, els.hlColor1, els.hlColor2];
+    // درخشش هر نمونه‌رنگ با همان رنگ خودش
+    const paintSwatches = () => swatches.forEach((el) => {
+      el.style.boxShadow = `0 0 10px ${el.value}66`;
+    });
+    swatches.forEach((el) => el.addEventListener('input', paintSwatches));
     els.hlReset.addEventListener('click', () => {
-      [els.hlColor0, els.hlColor1, els.hlColor2].forEach((el, i) => { el.value = DEFAULTS.hlColors[i]; });
+      swatches.forEach((el, i) => { el.value = DEFAULTS.hlColors[i]; });
+      paintSwatches();
       scheduleSave();
     });
+    paintSwatches();
     fontRadios.forEach((r) => {
       r.addEventListener('change', () => {
         els.customFont.hidden = picked(fontRadios, 'vazirmatn') !== 'custom';
