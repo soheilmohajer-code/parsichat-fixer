@@ -146,8 +146,8 @@
     const sel = window.getSelection();
     if (!sel.rangeCount) return;
     const range = sel.getRangeAt(0);
-    // فقط آن‌هایی که کامل داخل سلکشن‌اند (تا نصفه پاک نشود)
-    unwrapSpans(collectSpans(range, false));
+    // هر هایلایتی که سلکشن لمسش کند (حتی نصفه) کامل باز می‌شود
+    unwrapSpans(collectSpans(range, true));
     sel.removeAllRanges();
     hideBar();
   }
