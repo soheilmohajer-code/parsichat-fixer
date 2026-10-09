@@ -39,6 +39,7 @@
       processPage();
       startObserver();
       wireInputs(document);
+      scheduleSweeps();
     }
     chrome.storage.onChanged.addListener(onSettingsChanged);
   }
@@ -191,6 +192,23 @@
 
   function processPage() {
     processRoot(document);
+  }
+
+  // جاروی تأخیری برای SPAهایی مثل Claude که محتوا را دیر رندر می‌کنند،
+  // به‌علاوه تشخیص ناوبری داخلی (تعویض چت بدون رفرش صفحه).
+  function scheduleSweeps() {
+    const sweep = () => { if (isActiveForThisSite()) processPage(); };
+    window.addEventListener('load', sweep);
+    setTimeout(sweep, 1500);
+    setTimeout(sweep, 4000);
+    // history در ایزوله‌ورلد قابل شنود نیست؛ تغییر URL را با polling ارزان رصد کن
+    let lastUrl = location.href;
+    setInterval(() => {
+      if (location.href !== lastUrl) {
+        lastUrl = location.href;
+        setTimeout(sweep, 400);
+      }
+    }, 1000);
   }
 
   function clearMarks() {
