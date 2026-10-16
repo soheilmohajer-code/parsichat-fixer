@@ -138,6 +138,9 @@
     if (!sel.rangeCount) return;
     const range = sel.getRangeAt(0).cloneRange();
     if (!validRange(range)) { hideBar(); return; }
+    // غول‌کش: سلکشن چندبلوکی یا خیلی بلند، چیدمان صفحه را می‌شکند → هایلایت نزن
+    const txt = range.toString();
+    if (txt.length > 1000 || hasBlockNodes(range)) { hideBar(); return; }
     // هایلایت تودرتو نکن: قبلی‌های داخل رنج را اول باز کن
     unwrapSpans(collectSpans(range, true));
     const span = document.createElement('span');
@@ -155,6 +158,14 @@
     sel.removeAllRanges();
     savePage(); // ذخیره دائمی
     hideBar();
+  }
+
+  // آیا سلکشن شامل تگ بلوکی است؟ (هایلایت چندبلوکی چیدمان را می‌شکند)
+  function hasBlockNodes(range) {
+    try {
+      const frag = range.cloneContents();
+      return !!frag.querySelector('div, p, table, pre, ul, ol, li, article, section, blockquote, h1, h2, h3, h4, h5, h6');
+    } catch (e) { return false; }
   }
 
   // اسپن‌های هایلایت داخل رنج (partial=true: حتی نصفه‌ها)
@@ -235,7 +246,7 @@
 
   function anchorSpan(span) {
     const text = span.textContent || '';
-    if (!text.trim()) return null;
+    if (!text.trim() || text.length > 1000) return null; // غول‌ها ذخیره نمی‌شوند
     const block = span.closest('p, li, td, th, blockquote, h1, h2, h3, h4, div');
     if (!block || block.closest('textarea, input')) return null;
     const t = text.length > HL_MAX_TEXT ? text.slice(0, HL_MAX_TEXT) : text;
@@ -292,7 +303,7 @@
   }
 
   function findAndWrap(h, blocks) {
-    if (!h || !h.text) return false;
+    if (!h || !h.text || h.text.length > 1000) return false;
     const needle = h.before + h.text + h.after;
     for (const b of blocks) {
       if (b.closest('[contenteditable="true"]')) continue;
