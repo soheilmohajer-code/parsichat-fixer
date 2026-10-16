@@ -6,7 +6,7 @@
     enabled: true,
     highlight: true,
     hlColors: ['#ffeb3b', '#69f0ae', '#ff80ab'],
-    sites: { claude: true, chatgpt: true, openai: true, gemini: true, deepseek: true, grok: true },
+    sites: { claude: true, chatgpt: true, openai: true, gemini: true, deepseek: true, grok: true, perplexity: true, qwen: true, meta: true, kimi: true, zai: true },
     font: 'vazirmatn',
     customFont: '',
     fontSize: 100,
@@ -28,6 +28,11 @@
     gemini: $('site-gemini'),
     deepseek: $('site-deepseek'),
     grok: $('site-grok'),
+    perplexity: $('site-perplexity'),
+    qwen: $('site-qwen'),
+    meta: $('site-meta'),
+    kimi: $('site-kimi'),
+    zai: $('site-zai'),
     customFont: $('customFont'),
     fontSize: $('fontSize'),
     fontSizeVal: $('fontSizeVal'),
@@ -58,6 +63,11 @@
     els.gemini.checked = s.sites.gemini !== false;
     els.deepseek.checked = s.sites.deepseek !== false;
     els.grok.checked = s.sites.grok !== false;
+    els.perplexity.checked = s.sites.perplexity !== false;
+    els.qwen.checked = s.sites.qwen !== false;
+    els.meta.checked = s.sites.meta !== false;
+    els.kimi.checked = s.sites.kimi !== false;
+    els.zai.checked = s.sites.zai !== false;
     fontRadios.forEach((r) => { r.checked = r.value === (s.font || 'vazirmatn'); });
     els.customFont.value = s.customFont || '';
     els.customFont.hidden = picked(fontRadios, 'vazirmatn') !== 'custom';
@@ -116,7 +126,12 @@
         openai: els.openai.checked,
         gemini: els.gemini.checked,
         deepseek: els.deepseek.checked,
-        grok: els.grok.checked
+        grok: els.grok.checked,
+        perplexity: els.perplexity.checked,
+        qwen: els.qwen.checked,
+        meta: els.meta.checked,
+        kimi: els.kimi.checked,
+        zai: els.zai.checked
       },
       font: picked(fontRadios, 'vazirmatn'),
       customFont: els.customFont.value.trim(),

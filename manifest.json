@@ -2,8 +2,8 @@
   "manifest_version": 3,
   "name": "ParsiChat Fixer — پارسی‌چت",
   "short_name": "پارسی‌چت",
-  "version": "1.1.1",
-  "description": "پارسی‌چت: رفع به‌هم‌ریختگی متن فارسی/انگلیسی (RTL/LTR) در Claude، ChatGPT، Gemini، DeepSeek و Grok. بدون ارسال هیچ داده‌ای به بیرون.",
+  "version": "1.2.0",
+  "description": "پارسی‌چت: رفع به‌هم‌ریختگی متن فارسی/انگلیسی (RTL/LTR) در ۱۱ چت‌بات هوش مصنوعی. بدون ارسال هیچ داده‌ای به بیرون.",
   "minimum_chrome_version": "88",
   "permissions": ["storage"],
   "browser_specific_settings": {
@@ -18,7 +18,15 @@
     "https://chat.openai.com/*",
     "https://gemini.google.com/*",
     "https://chat.deepseek.com/*",
-    "https://grok.com/*"
+    "https://grok.com/*",
+    "https://perplexity.ai/*",
+    "https://www.perplexity.ai/*",
+    "https://chat.qwen.ai/*",
+    "https://meta.ai/*",
+    "https://www.meta.ai/*",
+    "https://kimi.com/*",
+    "https://www.kimi.com/*",
+    "https://chat.z.ai/*"
   ],
   "action": {
     "default_popup": "popup/popup.html",
@@ -44,7 +52,15 @@
         "https://chat.openai.com/*",
         "https://gemini.google.com/*",
         "https://chat.deepseek.com/*",
-        "https://grok.com/*"
+        "https://grok.com/*",
+        "https://perplexity.ai/*",
+        "https://www.perplexity.ai/*",
+        "https://chat.qwen.ai/*",
+        "https://meta.ai/*",
+        "https://www.meta.ai/*",
+        "https://kimi.com/*",
+        "https://www.kimi.com/*",
+        "https://chat.z.ai/*"
       ],
       "js": ["content/selectors.js", "content/bidi.js", "content/content.js", "content/highlight.js"],
       "css": ["content/styles.css"],
@@ -65,7 +81,15 @@
         "https://chat.openai.com/*",
         "https://gemini.google.com/*",
         "https://chat.deepseek.com/*",
-        "https://grok.com/*"
+        "https://grok.com/*",
+        "https://perplexity.ai/*",
+        "https://www.perplexity.ai/*",
+        "https://chat.qwen.ai/*",
+        "https://meta.ai/*",
+        "https://www.meta.ai/*",
+        "https://kimi.com/*",
+        "https://www.kimi.com/*",
+        "https://chat.z.ai/*"
       ]
     }
   ]

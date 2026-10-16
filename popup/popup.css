@@ -118,6 +118,10 @@ body {
   border-radius: 8px;
 }
 .row:hover { background: rgba(255, 255, 255, .05); }
+/* لیست سایت‌ها با ۱۱ گزینه اسکرول می‌شود تا پاپ‌آپ بلند نشود */
+.sites-list { max-height: 158px; overflow-y: auto; padding-inline-end: 2px; }
+.sites-list::-webkit-scrollbar { width: 6px; }
+.sites-list::-webkit-scrollbar-thumb { background: rgba(160, 107, 255, .4); border-radius: 6px; }
 .site {
   display: flex;
   align-items: center;

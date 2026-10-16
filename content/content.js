@@ -8,7 +8,7 @@
 
   const DEFAULTS = {
     enabled: true,
-    sites: { claude: true, chatgpt: true, openai: true, gemini: true, deepseek: true, grok: true },
+    sites: { claude: true, chatgpt: true, openai: true, gemini: true, deepseek: true, grok: true, perplexity: true, qwen: true, meta: true, kimi: true, zai: true },
     font: 'vazirmatn',   // 'vazirmatn' | 'site' | 'custom'
     customFont: '',
     fontSize: 100,       // درصد
@@ -53,6 +53,11 @@
     if (SEL.gemini.host.test(h)) return 'gemini';
     if (SEL.deepseek.host.test(h)) return 'deepseek';
     if (SEL.grok.host.test(h)) return 'grok';
+    if (SEL.perplexity.host.test(h)) return 'perplexity';
+    if (SEL.qwen.host.test(h)) return 'qwen';
+    if (SEL.meta.host.test(h)) return 'meta';
+    if (SEL.kimi.host.test(h)) return 'kimi';
+    if (SEL.zai.host.test(h)) return 'zai';
     return 'chatgpt';
   }
 

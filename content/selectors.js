@@ -162,6 +162,95 @@
         'form textarea',
         'form div[contenteditable="true"]'
       ].join(',')
+    },
+
+    // ---------- Perplexity (perplexity.ai) ----------
+    perplexity: {
+      host: /(^|\.)perplexity\.ai$/,
+      messages: [
+        '.prose',
+        '.markdown',
+        '[class*="answer"]',
+        '[class*="message"]'
+      ].join(','),
+      userMessages: '[class*="query"], [class*="user"]',
+      assistantMessages: [
+        '.prose',
+        '[class*="answer"]'
+      ].join(','),
+      inputs: [
+        'textarea',
+        'div[contenteditable="true"]',
+        'form textarea'
+      ].join(',')
+    },
+
+    // ---------- Qwen (chat.qwen.ai) ----------
+    qwen: {
+      host: /chat\.qwen\.ai$/,
+      messages: [
+        '.markdown',
+        '[data-message-author-role]',
+        '[class*="message"]'
+      ].join(','),
+      userMessages: '[class*="user"]',
+      assistantMessages: ['.markdown'].join(','),
+      inputs: [
+        'textarea',
+        'div[contenteditable="true"]',
+        'form textarea'
+      ].join(',')
+    },
+
+    // ---------- Meta AI (meta.ai) ----------
+    meta: {
+      host: /(^|\.)meta\.ai$/,
+      messages: [
+        '.markdown',
+        '[class*="message"]',
+        '[class*="response"]'
+      ].join(','),
+      userMessages: '[class*="user"]',
+      assistantMessages: ['.markdown'].join(','),
+      inputs: [
+        'div[contenteditable="true"]',
+        'textarea',
+        'form div[contenteditable="true"]'
+      ].join(',')
+    },
+
+    // ---------- Kimi (kimi.com) ----------
+    kimi: {
+      host: /(^|\.)kimi\.com$/,
+      messages: [
+        '.markdown',
+        '[class*="message"]',
+        '[class*="chat"]'
+      ].join(','),
+      userMessages: '[class*="user"]',
+      assistantMessages: ['.markdown'].join(','),
+      inputs: [
+        'textarea',
+        'div[contenteditable="true"]',
+        'form textarea'
+      ].join(',')
+    },
+
+    // ---------- Z.ai (chat.z.ai) ----------
+    zai: {
+      host: /chat\.z\.ai$/,
+      messages: [
+        '.markdown',
+        '[class*="message"]',
+        '[class*="response"]'
+      ].join(','),
+      userMessages: '[class*="user"]',
+      assistantMessages: ['.markdown'].join(','),
+      inputs: [
+        'textarea',
+        'div[contenteditable="true"]',
+        'form textarea'
+      ].join(',')
     }
   };
 })();

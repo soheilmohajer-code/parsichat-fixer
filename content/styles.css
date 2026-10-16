@@ -49,6 +49,7 @@ message-content,
 .response-content,
 .query-content,
 .ds-message,
+.prose,
 .markdown {
   unicode-bidi: plaintext;
 }

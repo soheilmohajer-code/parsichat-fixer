@@ -9,7 +9,8 @@
 A Manifest V3 browser extension (no frameworks, no server, no data leaves your
 browser) that fixes Persian/English mixed-text direction (RTL/LTR) breakage in
 **claude.ai**, **chatgpt.com**, **chat.openai.com**, **gemini.google.com**,
-**chat.deepseek.com** and **grok.com**.
+**chat.deepseek.com**, **grok.com**, **perplexity.ai**, **chat.qwen.ai**,
+**meta.ai**, **kimi.com** and **chat.z.ai**.
 
 ### Features
 - Per-block direction detection (paragraphs, list items, headings, table
@@ -104,7 +105,7 @@ or type it in the input box):
 8. **Input box:** typing Persian → RTL, typing English → LTR.
 
 ### Privacy
-Only `storage` permission + the six site hosts. No fetch/XHR, no analytics,
+Only `storage` permission + the eleven site hosts. No fetch/XHR, no analytics,
 no CDN. The font loads from inside the package.
 
 ### License
@@ -118,7 +119,8 @@ MIT — see [LICENSE](LICENSE). Bundled Vazirmatn fonts are under OFL 1.1.
 
 افزونه Manifest V3 (بدون فریم‌ورک، بدون سرور، بدون ارسال داده به بیرون) که
 به‌هم‌ریختگی متن فارسی + انگلیسی را در **claude.ai**، **chatgpt.com**،
-**chat.openai.com**، **gemini.google.com**، **chat.deepseek.com** و **grok.com**
+**chat.openai.com**، **gemini.google.com**، **chat.deepseek.com**، **grok.com**،
+**perplexity.ai**، **chat.qwen.ai**، **meta.ai**، **kimi.com** و **chat.z.ai**
 برطرف می‌کند.
 
 ### امکانات
@@ -186,7 +188,7 @@ MIT — see [LICENSE](LICENSE). Bundled Vazirmatn fonts are under OFL 1.1.
 8. **باکس ورودی:** با تایپ فارسی RTL و با تایپ انگلیسی LTR شود.
 
 ### حریم خصوصی
-فقط `storage` + هاست‌های شش دامنه. هیچ fetch/XHR، هیچ آنالیتیکس، هیچ CDN.
+فقط `storage` + هاست‌های یازده دامنه. هیچ fetch/XHR، هیچ آنالیتیکس، هیچ CDN.
 فونت از داخل بسته لود می‌شود.
 
 ### لایسنس
