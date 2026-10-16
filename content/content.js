@@ -318,7 +318,8 @@
   function flushPending() {
     const batch = [...pending];
     pending.clear();
-    // سقف هر بچ برای جلوگیری از فریز در استریم‌های سنگین
+    // سقف هر بچ برای جلوگیری از فریز در استریم‌های سنگین؛
+    // اضافه‌ها دور ریخته نمی‌شوند، در بچ بعدی پردازش می‌شوند
     const MAX = 300;
     for (let i = 0; i < Math.min(batch.length, MAX); i++) {
       const node = batch[i];
@@ -326,6 +327,11 @@
       try {
         processRoot(node);
       } catch (e) { /* یک بلوک خراب نباید بقیه را متوقف کند */ }
+    }
+    if (batch.length > MAX) {
+      for (let i = MAX; i < batch.length; i++) pending.add(batch[i]);
+      clearTimeout(debounceTimer);
+      debounceTimer = setTimeout(flushPending, 50);
     }
   }
 
