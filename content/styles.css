@@ -165,13 +165,17 @@ div[contenteditable="true"].pcf-input-rtl {
   text-align: right !important;
   unicode-bidi: plaintext !important;
 }
+/* خط‌های داخل باکس ورودی چندخطی: هر خط جهت خودش را بگیرد */
+div[contenteditable="true"].pcf-input-rtl p {
+  unicode-bidi: plaintext !important;
+}
 
 /* ===== ۸) فونت فارسی =====
  * unicode-range در @font-face guarantees که فقط حروف فارسی با Vazirmatn
  * رندر شوند؛ حروف لاتین و کد با فونت خود سایت می‌مانند.
  * pre/code عمداً از این قانون مستثنا هستند (monospace سایت حفظ شود). */
 html.pcf-font-vazir .pcf-rtl:not(pre):not(code),
-html.pcf-font-vazir [dir="rtl"]:not(pre):not(code):not(textarea) {
+html.pcf-font-vazir [dir="rtl"]:not(pre):not(code) {
   font-family: 'Vazirmatn', Tahoma, 'Segoe UI', system-ui, sans-serif !important;
   font-size: var(--pcf-font-size, 100%);
 }

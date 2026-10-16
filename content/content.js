@@ -126,12 +126,6 @@
 
   // ---------------- پردازش بلوک‌ها ----------------
 
-  /** آیتم لیست/لیست/عنوان: اکثریت فارسی بر حرف اول غلبه می‌کند. */
-  function useMajorityRule(el) {
-    const t = (el.tagName || '').toUpperCase();
-    return t === 'LI' || t === 'UL' || t === 'OL' || /^H[1-6]$/.test(t);
-  }
-
   /** جهت یک بلوک را تشخیص بده و dir + کلاس مناسب بگذار. ارزان و idempotent. */
   function processBlock(el) {
     if (!(el instanceof Element)) return;
@@ -139,14 +133,15 @@
     // متن را بدون محتوای کدهای تودرتو بسنج تا کد جهت را خراب نکند
     const text = el.innerText || el.textContent || '';
     if (!text.trim()) return;
-    const dir = BIDI.detectDirection(text, { majority: useMajorityRule(el) });
+    const dir = BIDI.detectDirection(text);
     const prev = el.getAttribute('dir');
     const want = dir === 'rtl' ? 'rtl' : 'ltr';
     if (prev !== want) el.setAttribute('dir', want);
     el.classList.toggle('pcf-rtl', dir === 'rtl');
     el.classList.toggle('pcf-ltr', dir !== 'rtl');
-    if (settings.digits !== 'off' && dir === 'rtl') {
-      // فقط متن فارسی؛ کد قبلاً در convertDigitsInElement مستثنا شده
+    if (settings.digits !== 'off' && dir === 'rtl' && !el.closest('textarea, input, [contenteditable="true"]')) {
+      // فقط متن فارسی؛ کد قبلاً در convertDigitsInElement مستثنا شده.
+      // داخل باکس ورودی در حال تایپ ارقام را دست نزن (با کاربر نجنگ).
       BIDI.convertDigitsInElement(el, settings.digits);
     }
     el.setAttribute(MARK, '1');
@@ -205,7 +200,7 @@
       if (el.hasAttribute(MARK)) {
         // در حالت استریم متن عوض می‌شود؛ با مقایسه سریع جهت، تغییر را تشخیص بده
         const t = (el.innerText || el.textContent || '').slice(0, 400);
-        const cur = BIDI.detectDirection(t, { majority: useMajorityRule(el) });
+        const cur = BIDI.detectDirection(t);
         const has = el.getAttribute('dir');
         if ((cur === 'rtl' && has === 'rtl') || (cur !== 'rtl' && has === 'ltr')) continue;
       }
