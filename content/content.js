@@ -169,6 +169,24 @@
     table.setAttribute(MARK, '1');
   }
 
+  /** لیست: جهت کانتینر از اکثریت آیتم‌ها (نشانگرها در کروم از کانتینر پیروی می‌کنند). */
+  function processList(list) {
+    if (!(list instanceof Element)) return;
+    const items = list.querySelectorAll(':scope > li');
+    const sample = Math.min(items.length, 12);
+    if (!sample) return;
+    let rtl = 0;
+    for (let i = 0; i < sample; i++) {
+      const t = items[i].innerText || items[i].textContent || '';
+      if (BIDI.detectDirection(t) === 'rtl') rtl++;
+    }
+    const isRtl = rtl * 2 >= sample; // تساوی به نفع فارسی
+    list.setAttribute('dir', isRtl ? 'rtl' : 'ltr');
+    list.classList.toggle('pcf-rtl', isRtl);
+    list.classList.toggle('pcf-ltr', !isRtl);
+    list.setAttribute(MARK, '1');
+  }
+
   /** ایزوله‌کردن کد درون‌خطی داخل جمله فارسی (جلوگیری از قاطی‌شدن ترتیب کلمات). */
   function isolateInlineCode(root) {
     const codes = root.querySelectorAll
@@ -217,6 +235,17 @@
       : (scope.querySelectorAll ? scope.querySelectorAll('table') : []);
     for (const t of tables) {
       if (!t.hasAttribute(MARK)) processTable(t);
+    }
+    // خود scope هم ممکن است جدول یا لیست تازه‌اضافه‌شده باشد
+    if (scope !== document && scope.matches) {
+      if (scope.matches('table') && !scope.hasAttribute(MARK)) processTable(scope);
+      if (scope.matches('ul, ol') && !scope.hasAttribute(MARK)) processList(scope);
+    }
+    const lists = scope === document
+      ? document.querySelectorAll('ul, ol')
+      : (scope.querySelectorAll ? scope.querySelectorAll('ul, ol') : []);
+    for (const l of lists) {
+      if (!l.hasAttribute(MARK)) processList(l);
     }
     isolateInlineCode(scope);
     wireInputs(scope);
