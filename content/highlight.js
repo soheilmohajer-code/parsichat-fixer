@@ -1,7 +1,8 @@
-/* highlight.js — هایلایتر متن چت با ۳ رنگ (Vanilla JS)
- * رفتار: متن را سلکت کن → نوار شناور با ۳ رنگ ظاهر می‌شود → کلیک = هایلایت.
- * دکمه ✕ هایلایتِ داخل سلکشن را پاک می‌کند.
- * نکته: هایلایت فقط همین نشست است (با رفرش پاک می‌شود) و روی input/textarea کار نمی‌کند.
+/* highlight.js — هایلایتر متن چت با ۳ رنگ قابل تنظیم (Vanilla JS)
+ * رفتار: متن را سلکت کن → نوار شناور ظاهر می‌شود → کلیک = هایلایت.
+ * دکمه پاک‌کن هایلایتِ لمس‌شده را پاک می‌کند.
+ * هایلایت‌ها به‌تفکیک هر گفتگو ذخیره دائمی می‌شوند و بعد از رفرش برمی‌گردند.
+ * روی input/textarea کار نمی‌کند.
  */
 (function () {
   'use strict';
@@ -48,6 +49,16 @@
     document.addEventListener('keydown', (e) => {
       if (e.key === 'Escape') hideBar();
     });
+    // بازیابی هایلایت‌های ذخیره‌شده، بعد از کامل شدن رندر پیام‌ها
+    setTimeout(restoreHighlights, 2000);
+    setTimeout(restoreHighlights, 5000);
+    let lastHlUrl = location.href;
+    setInterval(() => {
+      if (location.href !== lastHlUrl) {
+        lastHlUrl = location.href;
+        setTimeout(restoreHighlights, 1500);
+      }
+    }, 2000);
   }
 
   function onMouseUp(e) {
@@ -131,6 +142,7 @@
     unwrapSpans(collectSpans(range, true));
     const span = document.createElement('span');
     span.className = HL_CLASS;
+    span.dataset.pcfColor = color;
     span.style.background = hexToRgba(color, 0.45);
     span.style.boxShadow = `0 0 0 1px ${hexToRgba(color, 0.3)}`;
     try {
@@ -141,6 +153,7 @@
       range.insertNode(span);
     }
     sel.removeAllRanges();
+    savePage(); // ذخیره دائمی
     hideBar();
   }
 
@@ -163,6 +176,7 @@
     // هر هایلایتی که سلکشن لمسش کند (حتی نصفه) کامل باز می‌شود
     unwrapSpans(collectSpans(range, true));
     sel.removeAllRanges();
+    savePage(); // ذخیره دائمی (حذف‌شده‌ها از لیست می‌روند)
     hideBar();
   }
 
@@ -174,5 +188,174 @@
       parent.removeChild(s);
       parent.normalize();
     }
+  }
+
+  // ---------------- ذخیره دائمی هایلایت (storage.local) ----------------
+  // به‌جای آدرس شکننده DOM، «اثرانگشت» متن ذخیره می‌شود: ۴۰ حرف قبل + خود
+  // متن + ۴۰ حرف بعد، به‌تفکیک آدرس هر گفتگو. با رفرش دوباره پیدا و اعمال می‌شود.
+  const HL_STORE_KEY = 'pcf_hl';
+  const HL_CTX = 40;
+  const HL_MAX_TEXT = 200;
+  const HL_MAX_URLS = 200;
+  const HL_MAX_PER_URL = 200;
+  const HL_TTL = 90 * 24 * 3600 * 1000; // گفتگوهای قدیمی‌تر از ۹۰ روز تمیز می‌شوند
+  let saveTimer = 0;
+
+  function normUrl(href) {
+    try {
+      const u = new URL(href);
+      return u.origin + u.pathname; // query/hash که با هر بازدید عوض می‌شود، حذف
+    } catch (e) {
+      return String(href).split(/[?#]/)[0];
+    }
+  }
+
+  // متن خالص قبل (dir<0) یا بعد (dir>0) اسپن، داخل همان بلوک
+  function siblingText(block, span, dir) {
+    const walker = document.createTreeWalker(block, NodeFilter.SHOW_TEXT);
+    const nodes = [];
+    while (walker.nextNode()) nodes.push(walker.currentNode);
+    let first = -1, last = -1;
+    nodes.forEach((n, i) => {
+      if (span.contains(n)) { if (first < 0) first = i; last = i; }
+    });
+    if (first < 0) return '';
+    let out = '';
+    if (dir < 0) {
+      for (let i = first - 1; i >= 0 && out.length < HL_CTX; i--) {
+        out = nodes[i].nodeValue + out;
+      }
+      return out.slice(-HL_CTX);
+    }
+    for (let i = last + 1; i < nodes.length && out.length < HL_CTX; i++) {
+      out += nodes[i].nodeValue;
+    }
+    return out.slice(0, HL_CTX);
+  }
+
+  function anchorSpan(span) {
+    const text = span.textContent || '';
+    if (!text.trim()) return null;
+    const block = span.closest('p, li, td, th, blockquote, h1, h2, h3, h4, div');
+    if (!block || block.closest('textarea, input')) return null;
+    const t = text.length > HL_MAX_TEXT ? text.slice(0, HL_MAX_TEXT) : text;
+    return {
+      before: siblingText(block, span, -1),
+      text: t,
+      after: siblingText(block, span, 1),
+      color: span.dataset.pcfColor || DEFAULT_COLORS[0],
+      ts: Date.now()
+    };
+  }
+
+  // پیچیدن دقیق بازه [start, start+len) از متن بلوک داخل اسپن هایلایت
+  function wrapByOffset(block, start, len, color) {
+    const walker = document.createTreeWalker(block, NodeFilter.SHOW_TEXT);
+    const nodes = [];
+    while (walker.nextNode()) nodes.push(walker.currentNode);
+    let pos = 0, si = -1, soff = 0;
+    for (let i = 0; i < nodes.length; i++) {
+      const L = nodes[i].nodeValue.length;
+      if (si < 0 && pos + L > start) { si = i; soff = start - pos; }
+      pos += L;
+    }
+    if (si < 0) return false;
+    // اگر قبلاً هایلایت شده، رد کن (جلوگیری از تودرتو شدن در بازیابی تکراری)
+    const sp = nodes[si].parentElement;
+    if (sp && sp.closest('span.' + HL_CLASS)) return false;
+    let remain = len, ei = si, eoff = soff;
+    for (let i = si; i < nodes.length && remain > 0; i++) {
+      const avail = nodes[i].nodeValue.length - (i === si ? soff : 0);
+      if (avail >= remain) { ei = i; eoff = (i === si ? soff : 0) + remain; remain = 0; }
+      else remain -= avail;
+    }
+    if (remain > 0) return false;
+    const range = document.createRange();
+    try {
+      range.setStart(nodes[si], soff);
+      range.setEnd(nodes[ei], eoff);
+    } catch (e) { return false; }
+    const span = document.createElement('span');
+    span.className = HL_CLASS;
+    span.dataset.pcfColor = color;
+    span.style.background = hexToRgba(color, 0.45);
+    span.style.boxShadow = `0 0 0 1px ${hexToRgba(color, 0.3)}`;
+    try {
+      range.surroundContents(span);
+    } catch (e) {
+      try {
+        span.appendChild(range.extractContents());
+        range.insertNode(span);
+      } catch (e2) { return false; }
+    }
+    return true;
+  }
+
+  function findAndWrap(h, blocks) {
+    if (!h || !h.text) return false;
+    const needle = h.before + h.text + h.after;
+    for (const b of blocks) {
+      if (b.closest('[contenteditable="true"]')) continue;
+      const full = b.textContent || '';
+      const idx = full.indexOf(needle);
+      if (idx < 0) continue;
+      if (wrapByOffset(b, idx + h.before.length, h.text.length, h.color)) return true;
+    }
+    return false;
+  }
+
+  async function restoreHighlights() {
+    if (!enabled) return;
+    let list = [];
+    try {
+      const store = (await chrome.storage.local.get(HL_STORE_KEY))[HL_STORE_KEY] || {};
+      list = store[normUrl(location.href)] || [];
+    } catch (e) { return; }
+    if (!list.length) return;
+    const blocks = [...document.querySelectorAll('p, li, td, th, blockquote, h1, h2, h3, h4, div')]
+      .filter((b) => !b.closest('textarea, input, [contenteditable="true"]'));
+    for (const h of list.slice(0, HL_MAX_PER_URL)) findAndWrap(h, blocks);
+  }
+
+  function savePage() {
+    clearTimeout(saveTimer);
+    saveTimer = setTimeout(doSave, 600);
+  }
+
+  function latestTs(arr) {
+    arr = Array.isArray(arr) ? arr : [];
+    let m = 0;
+    for (const it of arr) m = Math.max(m, it.ts || 0);
+    return m;
+  }
+
+  async function doSave() {
+    if (!enabled) return;
+    try {
+      const url = normUrl(location.href);
+      const items = [];
+      document.querySelectorAll('span.' + HL_CLASS).forEach((span) => {
+        if (items.length >= HL_MAX_PER_URL) return;
+        const a = anchorSpan(span);
+        if (a) items.push(a);
+      });
+      const store = (await chrome.storage.local.get(HL_STORE_KEY))[HL_STORE_KEY] || {};
+      // تمیزکاری: حذف گفتگوهای قدیمی + سقف تعداد
+      const now = Date.now();
+      for (const k of Object.keys(store)) {
+        if (k === url) continue;
+        const arr = Array.isArray(store[k]) ? store[k] : [];
+        const fresh = arr.filter((it) => now - (it.ts || 0) < HL_TTL).slice(-HL_MAX_PER_URL);
+        if (fresh.length) store[k] = fresh;
+        else delete store[k];
+      }
+      const keys = Object.keys(store);
+      if (keys.length > HL_MAX_URLS) {
+        keys.sort((a, b) => latestTs(store[a]) - latestTs(store[b]));
+        while (Object.keys(store).length > HL_MAX_URLS) delete store[keys.shift()];
+      }
+      store[url] = items;
+      await chrome.storage.local.set({ [HL_STORE_KEY]: store });
+    } catch (e) { /* سهمیه یا خطا: بی‌سروصدا رد شو */ }
   }
 })();

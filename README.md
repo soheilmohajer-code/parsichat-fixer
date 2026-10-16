@@ -27,6 +27,9 @@ browser) that fixes Persian/English mixed-text direction (RTL/LTR) breakage in
   (Vazirmatn / site default / custom system font), font size, line height,
   Persian/English digits (text only, never code).
 - Settings are stored in `chrome.storage.sync`.
+- Text highlighter: select text for a floating 3-color toolbar (customizable
+  colors); highlights are saved per conversation in `chrome.storage.local`
+  and restored after reload.
 
 ### Project structure
 ```
@@ -136,6 +139,8 @@ MIT — see [LICENSE](LICENSE). Bundled Vazirmatn fonts are under OFL 1.1.
 - پاپ‌آپ: سوییچ کلی، فعال/غیرفعال per-site، انتخاب فونت (وزیرمتن/سایت/دلخواه)،
   اندازه فونت، ارتفاع خط، ارقام فارسی/انگلیسی (فقط متن، نه کد).
 - تنظیمات در `chrome.storage.sync` ذخیره می‌شود.
+- هایلایتر متن: با سلکت متن، نوار ۳رنگه (قابل تنظیم) ظاهر می‌شود؛ هایلایت‌ها
+  به‌تفکیک هر گفتگو در `chrome.storage.local` ذخیره و بعد از رفرش برمی‌گردند.
 
 ### فونت‌ها
 فایل‌های `fonts/*.woff2` از ریپوی رسمی دانلود شده‌اند:
